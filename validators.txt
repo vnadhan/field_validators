@@ -1,0 +1,63 @@
+<script>
+	$(document).ready(function() {
+		$.validator.addMethod("RegexForText", function(value, element) {
+	    	return /^[a-zA-Z][ \w@\.\#\$\,\:\{\}\%\/\&\+\-\^\(\)\*]*[a-zA-Z0-9]+$/i.test(value);
+	    }, 'Invalid input');
+		$.validator.addMethod("RegexForId", function(value, element) {
+			return /^[a-zA-Z]+$|[a-zA-Z]+([\w@\.\#\$\,\:\{\}\%\/\&\+\-\^\(\)\*])?([a-zA-Z0-9])+$/i.test(value);
+	    }, 'Invalid input');
+		$.validator.addMethod("RegexAvoidSpace", function(value, element) {
+			var regex = /^[ ]+|[ ]+$/i.test(value);
+			console.log("regex" + regex + ", neg : " + !regex);
+		    return !regex;
+		}, 'Spaces not allowed');
+		$.validator.addMethod("requiredField", function(value, element) {
+			if (value.length == 0)
+				return false;
+			return true;
+		}, 'Required');
+		$.validator.addMethod("selectRequired", function(value, element) {
+			if (value == "")
+				return false;
+			return true;
+		}, '<spring:message code="iproduct.error.msg.select.class"/>');
+		
+		function validateId(e) {
+			if(e.which == 32){
+				e.preventDefault();
+				return false;
+			}
+		}
+		priceTypeValidator = $("#newPriceTypeForm").validate({
+					rules : {
+						"code" : {
+							minlength : 1,
+							maxlength : 10,
+							requiredField : true,
+							RegexForId :true,
+							RegexAvoidSpace : true
+						},
+						"name" : {
+							minlength : 1,
+							maxlength : 50,
+							requiredField : true,
+							RegexForText :true
+						},
+						"description" : {
+							minlength : 1,
+							maxlength : 255,
+							requiredField : true,
+							RegexForText :true
+						},
+						"dropdown" : {
+							selectRequired : true
+						}
+					},
+					messages : {
+						"code" : {
+							minlength : "Length should be <= 50"	
+						}
+					}
+				});
+});
+</script>
